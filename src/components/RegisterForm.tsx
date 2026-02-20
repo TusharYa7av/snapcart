@@ -5,6 +5,9 @@ import Image from 'next/image'
 import goodleimage from "@/assets/googleImage-PNG.avif"
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
+
 
 type propType = {
   previousStep:(s:number)=>void
@@ -16,6 +19,7 @@ const RegisterForm = ({previousStep}:propType) => {
   const [password , setPassword] = useState("")
   const [showPassword , setShowPassword] =useState(false)
   const [loading ,setLoading] = useState(false)
+  const router = useRouter()
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,7 +30,7 @@ const RegisterForm = ({previousStep}:propType) => {
         email,
         password,
       })
-      console.log(result.data)
+      router.push("/login")
       setLoading(false)
     } catch (error) {
       console.log(error)
@@ -113,15 +117,15 @@ const RegisterForm = ({previousStep}:propType) => {
             <span className='flex-1 h-px bg-gray-200'></span>
           </div>
 
-          <button className='w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200'>
+          <div className='w-full flex items-center justify-center gap-3 border border-gray-300 hover:bg-gray-50 py-3 rounded-xl text-gray-700 font-medium transition-all duration-200' onClick={()=>signIn("google",{callbackUrl:"/"})}>
             <Image src={goodleimage} width={20} height={20} alt="Google Logo" />
             Continue with Google
-          </button>
+          </div>
 
 
         </motion.form>
 
-        <p className='text-gray-600 mt-6 text-sm flex items-center gap-1 cursor-pointer'>Already have an Account ? <LogIn className=''/><span className='text-green-600'>Sign in</span></p>
+        <p className='text-gray-600 mt-6 text-sm flex items-center gap-1 cursor-pointer' onClick={()=>router.push("/login")}>Already have an Account ? <LogIn className=''/><span className='text-green-600'>Sign in</span></p>
 
 
 
