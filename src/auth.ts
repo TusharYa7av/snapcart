@@ -64,12 +64,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     //token ke andr user ka data store krte hai 
-    async jwt({token, user}){
+    async jwt({token, user,trigger}){
       if(user){
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
         token.role = user.role;
+      }
+      if(trigger=="update"){
+        token.role=session.role
       }
       return token;
     },
