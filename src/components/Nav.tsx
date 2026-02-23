@@ -20,6 +20,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useSelector } from "react-redux";
 interface IUser {
   _id?: mongoose.Types.ObjectId;
   name: string;
@@ -35,6 +36,7 @@ const Nav = ({ user }: { user: IUser }) => {
   const profileDropdown = useRef<HTMLDivElement>(null);
   const [searchBarOpen, setSearchBarOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const {cartData}=useSelector((state:any)=>state.cart)
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -159,12 +161,12 @@ const Nav = ({ user }: { user: IUser }) => {
             </div>
 
             <Link
-              href={""}
+              href={"/user/cart"}
               className="relative bg-white rounded-full w-11 h-11 flex items-center justify-center shadow-md hover:scale-105 transition"
             >
               <ShoppingCart className="text-green-600 w-6 h-6 " />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full font-semibold shadow">
-                0
+                {cartData.length}
               </span>
             </Link>
           </>

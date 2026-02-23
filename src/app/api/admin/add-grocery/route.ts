@@ -20,20 +20,29 @@ export async function POST(req:NextRequest){
     const category=formData.get("category") as string
     const unit = formData.get("unit") as string
     const price = formData.get("price") as string
-    const file = formData.get("image") as Blob | null
+    const file = formData.get("image") as File | null
     let imageUrl
     if(file){
       imageUrl = await uploadOnCloudinary(file)
     }
 
+    if (!name || !category || !unit || !price) {
+      return NextResponse.json(
+        { message: "All fields required" },
+        { status: 400 }
+      );
+    }
+
     const grocery = await Grocery.create({
-      name,price,category,unit,imageUrl,
+      name,price,category,unit,image:imageUrl,
     })
+    
     return NextResponse.json(
       grocery,
       {status:200}
     )
   } catch (error) {
+    console.log(error)
     return NextResponse.json(
       {message:`add grocery error ${error}`},
       {status:500},

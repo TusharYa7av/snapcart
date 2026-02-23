@@ -1,9 +1,8 @@
 'use client'
 
 import axios from 'axios'
-import { ArrowLeft, PlusCircle, Upload } from 'lucide-react'
+import { ArrowLeft, Key, PlusCircle, Upload } from 'lucide-react'
 import { motion } from 'motion/react'
-import { option } from 'motion/react-client'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { ChangeEvent, FormEvent, useState } from 'react'
@@ -42,6 +41,7 @@ const AddGrocery = () => {
   const handleSubmit = async (e:FormEvent) => {
     e.preventDefault()
     try {
+      console.log("API HIT")
       const formData= new FormData()
       formData.append("name", name)
       formData.append("category" , category)
@@ -51,8 +51,16 @@ const AddGrocery = () => {
         formData.append("image",backendImage)
       }
       
-      const result = await axios.post("/adim/add/add-grocery", formData)
+      const result = await axios.post("/api/admin/add-grocery", formData)
       console.log(result.data)
+
+    setName("");
+    setCategory("");
+    setUnit("");
+    setPrice("");
+    setPreview(null);
+    setBackendImage(null);
+
     } catch (error) {
       console.log(error)
     }
@@ -91,7 +99,8 @@ const AddGrocery = () => {
           <select name="category" className='w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-green-400 transition-all bg-white' onChange={(e)=>setCategory(e.target.value)} value={category}>
             <option value="">Select Category</option>
             {categories.map(cat=>(
-              <option value={cat}>{cat}</option>
+              
+              <option  value={cat}>{cat}</option>
             ))}
           </select>
           </div>
